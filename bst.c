@@ -7,10 +7,10 @@ struct node {
     int data;
 };
 
-struct node *root;
+struct node *root = NULL; // Initialize root to NULL
 
 struct node *newnode(int value) {
-    struct node newnode = (struct node)malloc(sizeof(struct node));
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
     newnode->data = value;
     newnode->left = NULL;
     newnode->right = NULL;
@@ -19,10 +19,10 @@ struct node *newnode(int value) {
 
 struct node *insert(struct node *root, int value) {
     if (root == NULL) {
-        return newnode(value);
+        return newnode(value); // Create root node if root is NULL
     } else if (value == root->data) {
         printf("Same data can't be stored\n");
-        return root; // Important: return root to avoid infinite recursion
+        return root;
     } else if (value > root->data) {
         root->right = insert(root->right, value);
     } else {
@@ -61,10 +61,10 @@ void postorderTraversal(struct node *root) {
 struct node *search(struct node *root, int key) {
     if (root == NULL) {
         printf("\nNOT FOUND\n");
-        return NULL; // Return NULL if not found
+        return NULL;
     } else if (root->data == key) {
         printf("\nFOUND\n");
-        return root; // Return the found node
+        return root;
     } else if (root->data < key) {
         return search(root->right, key);
     } else {
@@ -109,40 +109,43 @@ int main() {
     int opt;
     int value, searchv, key;
     do {
-        printf("\n 1) Create root Node \n 2) insert Node \n 3) search\n 4) inorderTraversal \n 5) preorderTraversal \n  6) postorderTraversal \n 7)delete \n 8) exit \n ");
-        printf("choose an option ::");
+        printf("\n1) Insert Node \n2) Search\n3) Inorder Traversal\n4) Preorder Traversal\n5) Postorder Traversal\n6) Delete\n7) Exit\n");
+        printf("Choose an option: ");
         scanf("%d", &opt);
         switch (opt) {
             case 1:
-                printf("\n enter a number:");
-                scanf("%d", &value);
-                root = newnode(value);
-                break;
-            case 2:
-                printf("\n enter a number:");
+                printf("\nEnter a number: ");
                 scanf("%d", &value);
                 root = insert(root, value);
                 break;
-            case 3:
-                printf("\n enter a number:");
+            case 2:
+                printf("\nEnter a number to search: ");
                 scanf("%d", &searchv);
                 search(root, searchv);
                 break;
-            case 4:
+            case 3:
                 inorderTraversal(root);
+                printf("\n");
+                break;
+            case 4:
+                preorderTraversal(root);
+                printf("\n");
                 break;
             case 5:
-                preorderTraversal(root);
+                postorderTraversal(root);
+                printf("\n");
                 break;
             case 6:
-                postorderTraversal(root);
+                printf("\nEnter a number to delete: ");
+                scanf("%d", &key);
+                root = deleteNode(root, key);
                 break;
             case 7:
-                printf("\n enter a number to delete:");
-                scanf("%d", &key);
-                deleteNode(root, key);
+                printf("Exiting...\n");
                 break;
             default:
-                printf("invalid option!\n");
+                printf("Invalid option!\n");
         }
-    } while (opt != 8);
+    } while (opt != 7);
+    return 0;
+}
